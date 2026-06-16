@@ -7,8 +7,10 @@ import com.sp.reservationservice.domain.exception.ConflictException;
 import com.sp.reservationservice.domain.exception.ForbiddenException;
 import com.sp.reservationservice.domain.exception.NotFoundException;
 import com.sp.reservationservice.domain.model.Court;
+import com.sp.reservationservice.domain.model.PageModel;
 import com.sp.reservationservice.domain.model.Role;
 import com.sp.reservationservice.domain.spi.ICourtPersistencePort;
+import com.sp.reservationservice.domain.spi.ICourtTypePersistencePort;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -16,6 +18,7 @@ public class CourtService implements ICourtServicePort {
 
     private final ICourtPersistencePort courtPersistencePort;
     private final IAuthenticationServicePort authenticationServicePort;
+    private final ICourtTypePersistencePort courtTypePersistencePort;
 
     @Override
     public void createCourt(Court court) {
@@ -49,5 +52,21 @@ public class CourtService implements ICourtServicePort {
 
         court.setActive(false);
         courtPersistencePort.saveCourt(court);
+    }
+
+    @Override
+    public PageModel<Court> getCourts(Boolean active, Long courtTypeId, int page, int size) {
+
+        Role role = authenticationServicePort.getCurrentUserRole();
+        if (role != Role.CLIENT){
+            throw new ForbiddenException(DomainConstants.ONLY_CLIENT_CAN_GET_COURTS);
+        }
+        if (courtTypeId != null) {
+            courtTypePersistencePort.findCourtTypeById(courtTypeId)
+                .orElseThrow(() -> new NotFoundException(DomainConstants.MSG_COURT_TYPE_NOT_FOUND + courtTypeId));
+
+            return courtPersistencePort.findCourtsByActiveAndCourtTypeId(active, courtTypeId, page, size);
+        }
+        return courtPersistencePort.findCourtsByActive(active, page, size);
     }
 }

@@ -3,6 +3,7 @@ package com.sp.reservationservice.infrastructure.output.jpa.adapter;
 import com.sp.reservationservice.domain.constants.DomainConstants;
 import com.sp.reservationservice.domain.exception.NotFoundException;
 import com.sp.reservationservice.domain.model.Court;
+import com.sp.reservationservice.domain.model.PageModel;
 import com.sp.reservationservice.domain.spi.ICourtPersistencePort;
 import com.sp.reservationservice.infrastructure.output.jpa.entity.CourtEntity;
 import com.sp.reservationservice.infrastructure.output.jpa.entity.CourtTypeEntity;
@@ -10,6 +11,9 @@ import com.sp.reservationservice.infrastructure.output.jpa.mapper.ICourtEntityMa
 import com.sp.reservationservice.infrastructure.output.jpa.repository.ICourtRepository;
 import com.sp.reservationservice.infrastructure.output.jpa.repository.ICourtTypeRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -41,5 +45,26 @@ public class CourtJpaAdapter implements ICourtPersistencePort {
     public Optional<Court> findCourtById(Long id) {
         return courtRepository.findById(id)
                 .map(courtEntityMapper::toDomain);
+    }
+
+    @Override
+    public PageModel<Court> findCourtsByActive(Boolean active, int page, int size) {
+
+        Pageable pageable = PageRequest.of(page,size);
+
+        Page<CourtEntity> resultPage =  courtRepository.findByActive(active, pageable);
+
+        return courtEntityMapper.toPageModel(resultPage);
+    }
+
+    @Override
+    public PageModel<Court> findCourtsByActiveAndCourtTypeId(Boolean active, Long courtTypeId, int page, int size) {
+
+        Pageable pageable = PageRequest.of(page,size);
+
+        Page<CourtEntity> resultPage =  courtRepository.findByActiveAndCourtTypeEntity_Id(active, courtTypeId, pageable);
+
+        return courtEntityMapper.toPageModel(resultPage);
+
     }
 }

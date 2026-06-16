@@ -15,4 +15,7 @@ public class DomainConstants {
     public static final String ONLY_ADMIN_CAN_UPDATE_COURT = "Only admin can update court";
     public static final String MSG_COURT_ALREADY_EXISTS = "Court already exists with name: ";
     public static final String ONLY_ADMIN_CAN_DISABLE_COURT = "Only admin can disable court";
+    public static final String COURT_IS_DISABLED = "Court is disabled";
+    public static final String MSG_COURT_TYPE_NOT_FOUND = "Court type not found";
+    public static final String ONLY_CLIENT_CAN_GET_COURTS = "Only client can get courts";
 }

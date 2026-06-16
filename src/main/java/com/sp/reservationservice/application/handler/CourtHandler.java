@@ -1,6 +1,7 @@
 package com.sp.reservationservice.application.handler;
 
 import com.sp.reservationservice.application.dto.CourtDTO;
+import com.sp.reservationservice.application.dto.PageResponseDTO;
 import com.sp.reservationservice.application.mapper.ICourtMapper;
 import com.sp.reservationservice.domain.api.ICourtServicePort;
 import com.sp.reservationservice.domain.model.Court;
@@ -29,5 +30,10 @@ public class CourtHandler implements ICourtHandler {
     @Override
     public void disableCourt(Long courtId) {
         courtServicePort.disableCourt(courtId);
+    }
+
+    @Override
+    public PageResponseDTO<CourtDTO> getCourts(Boolean active, Long courtTypeId, int page, int size) {
+        return courtMapper.toPageResponseDTO(courtServicePort.getCourts(active, courtTypeId, page, size));
     }
 }

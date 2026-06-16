@@ -1,7 +1,9 @@
 package com.sp.reservationservice.application.mapper;
 
 import com.sp.reservationservice.application.dto.CourtDTO;
+import com.sp.reservationservice.application.dto.PageResponseDTO;
 import com.sp.reservationservice.domain.model.Court;
+import com.sp.reservationservice.domain.model.PageModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
@@ -10,5 +12,5 @@ public interface ICourtMapper {
 
     Court toDomain(CourtDTO courtDTO);
 
-
+    PageResponseDTO<CourtDTO> toPageResponseDTO(PageModel<Court> pageModel);
 }

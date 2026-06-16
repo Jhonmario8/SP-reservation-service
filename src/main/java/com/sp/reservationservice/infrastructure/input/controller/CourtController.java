@@ -1,6 +1,7 @@
 package com.sp.reservationservice.infrastructure.input.controller;
 
 import com.sp.reservationservice.application.dto.CourtDTO;
+import com.sp.reservationservice.application.dto.PageResponseDTO;
 import com.sp.reservationservice.application.handler.ICourtHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,4 +33,11 @@ public class CourtController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping
+    public ResponseEntity<PageResponseDTO<CourtDTO>> getCourts(
+                                               @RequestParam(required = false) Long courtTypeId,
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "10") int size) {
+        return new ResponseEntity<>(courtHandler.getCourts(true, courtTypeId, page, size), HttpStatus.OK);
+    }
 }

@@ -4,6 +4,7 @@ import com.sp.reservationservice.domain.api.IAuthenticationServicePort;
 import com.sp.reservationservice.domain.api.ICourtServicePort;
 import com.sp.reservationservice.domain.api.IReservationServicePort;
 import com.sp.reservationservice.domain.spi.ICourtPersistencePort;
+import com.sp.reservationservice.domain.spi.ICourtTypePersistencePort;
 import com.sp.reservationservice.domain.spi.IReservationPersistencePort;
 import com.sp.reservationservice.domain.usecase.CourtService;
 import com.sp.reservationservice.domain.usecase.ReservationService;
@@ -18,14 +19,15 @@ public class BeanConfiguration {
     private final ICourtPersistencePort courtPersistencePort;
     private final IAuthenticationServicePort authenticationServicePort;
     private final IReservationPersistencePort reservationPersistencePort;
+    private final ICourtTypePersistencePort courtTypePersistencePort;
 
     @Bean
     public ICourtServicePort courtServicePort() {
-        return new CourtService(courtPersistencePort, authenticationServicePort);
+        return new CourtService(courtPersistencePort, authenticationServicePort, courtTypePersistencePort);
     }
 
     @Bean
     public IReservationServicePort reservationServicePort() {
-        return new ReservationService(reservationPersistencePort , authenticationServicePort);
+        return new ReservationService(reservationPersistencePort , authenticationServicePort, courtPersistencePort);
     }
 }
