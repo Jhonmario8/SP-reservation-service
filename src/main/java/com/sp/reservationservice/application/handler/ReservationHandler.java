@@ -1,0 +1,20 @@
+package com.sp.reservationservice.application.handler;
+
+import com.sp.reservationservice.application.dto.ReservationRequest;
+import com.sp.reservationservice.application.mapper.IReservationMapper;
+import com.sp.reservationservice.domain.api.IReservationServicePort;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@AllArgsConstructor
+public class ReservationHandler implements IReservationHandler{
+
+    private final IReservationServicePort reservationServicePort;
+    private final IReservationMapper reservationMapper;
+
+    @Override
+    public void createReservation(ReservationRequest request) {
+        reservationServicePort.createReservation(reservationMapper.toDomain(request));
+    }
+}

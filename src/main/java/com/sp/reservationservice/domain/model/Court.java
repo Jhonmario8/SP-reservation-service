@@ -18,14 +18,6 @@ public class Court {
     private CourtType type;
     private Integer capacity;
     private Double hourlyRate;
-    private Boolean available;
+    private Boolean available = true;
 
-    public Court(Long id, String name, CourtType type, Integer capacity, Double hourlyRate) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.capacity = capacity;
-        this.hourlyRate = hourlyRate;
-        this.available = true;
-    }
 }
