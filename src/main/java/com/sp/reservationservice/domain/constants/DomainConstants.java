@@ -12,4 +12,7 @@ public class DomainConstants {
     public static final String ONLY_ADMIN_CAN_CREATE_COURT = "Only admin can create court";
     public static final String COURT_ALREADY_RESERVED = "Court is already reserved for the selected time slot";
     public static final String ONLY_CLIENT_CAN_CREATE_RESERVATION = "Only client can create reservation";
+    public static final String ONLY_ADMIN_CAN_UPDATE_COURT = "Only admin can update court";
+    public static final String MSG_COURT_ALREADY_EXISTS = "Court already exists with name: ";
+    public static final String ONLY_ADMIN_CAN_DISABLE_COURT = "Only admin can disable court";
 }

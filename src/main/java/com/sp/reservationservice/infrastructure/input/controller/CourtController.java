@@ -5,10 +5,7 @@ import com.sp.reservationservice.application.handler.ICourtHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/courts")
@@ -21,6 +18,18 @@ public class CourtController {
     public ResponseEntity<Void> createCourt(@RequestBody CourtDTO courtDTO) {
         courtHandler.createCourt(courtDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{courtId}")
+    public ResponseEntity<Void> updateCourt(@PathVariable Long courtId, @RequestBody CourtDTO courtDTO) {
+        courtHandler.updateCourt(courtId, courtDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/{courtId}")
+    public ResponseEntity<Void> disableCourt(@PathVariable Long courtId) {
+        courtHandler.disableCourt(courtId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

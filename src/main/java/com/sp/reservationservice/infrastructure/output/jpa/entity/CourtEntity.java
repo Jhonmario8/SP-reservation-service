@@ -21,7 +21,7 @@ public class CourtEntity {
     private String name;
     private Integer capacity;
     private Double hourlyRate;
-    private Boolean available;
+    private Boolean active;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "court_type_id", nullable = false)

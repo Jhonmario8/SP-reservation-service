@@ -12,6 +12,8 @@ import com.sp.reservationservice.infrastructure.output.jpa.repository.ICourtType
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class CourtJpaAdapter implements ICourtPersistencePort {
@@ -27,5 +29,17 @@ public class CourtJpaAdapter implements ICourtPersistencePort {
         CourtEntity courtEntity = courtEntityMapper.toEntity(court);
         courtEntity.setCourtTypeEntity(courtTypeEntity);
         courtRepository.save(courtEntity);
+    }
+
+    @Override
+    public Optional<Court> findCourtByName(String name) {
+        return courtRepository.findByName(name)
+                .map(courtEntityMapper::toDomain);
+    }
+
+    @Override
+    public Optional<Court> findCourtById(Long id) {
+        return courtRepository.findById(id)
+                .map(courtEntityMapper::toDomain);
     }
 }

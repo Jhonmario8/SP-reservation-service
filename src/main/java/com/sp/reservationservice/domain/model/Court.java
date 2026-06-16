@@ -18,6 +18,6 @@ public class Court {
     private CourtType type;
     private Integer capacity;
     private Double hourlyRate;
-    private Boolean available = true;
+    private Boolean active = true;
 
 }

@@ -10,6 +10,5 @@ public interface ICourtMapper {
 
     Court toDomain(CourtDTO courtDTO);
 
-    CourtDTO toDTO(Court court);
 
 }
