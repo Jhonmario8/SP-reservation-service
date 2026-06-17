@@ -5,10 +5,7 @@ import com.sp.reservationservice.application.handler.IReservationHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/reservations")
@@ -18,9 +15,20 @@ public class ReservationController {
     private final IReservationHandler reservationHandler;
 
     @PostMapping
-    public ResponseEntity<Void> createReservation(@RequestBody ReservationRequest request){
+    public ResponseEntity<Void> createReservation(@RequestBody ReservationRequest request) {
         reservationHandler.createReservation(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateReservationStatus(@PathVariable Long id, @RequestParam String status) {
+        reservationHandler.updateReservationStatus(id, status);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> cancelReservation(@PathVariable Long id) {
+        reservationHandler.cancelReservation(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class ICourtTypeJpaAdapter implements ICourtTypePersistencePort {
+public class CourtTypeJpaAdapter implements ICourtTypePersistencePort {
 
     private final ICourtTypeRepository courtTypeRepository;
 

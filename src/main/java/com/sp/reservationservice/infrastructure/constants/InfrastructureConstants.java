@@ -19,4 +19,5 @@ public class InfrastructureConstants {
     public static final int CONFLICT = 409;
 
     public static final int FORBIDDEN = 403;
+
 }

@@ -4,4 +4,6 @@ import com.sp.reservationservice.application.dto.ReservationRequest;
 
 public interface IReservationHandler {
     void createReservation(ReservationRequest request);
+    void updateReservationStatus(Long reservationId, String status);
+    void cancelReservation(Long reservationId);
 }
