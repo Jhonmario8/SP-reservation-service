@@ -31,4 +31,10 @@ public class ReservationController {
         reservationHandler.cancelReservation(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getReservations(@PathVariable Long userId, @RequestParam(required = false) String status,
+                                             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return new ResponseEntity<>(reservationHandler.getReservations(userId, status, page, size), HttpStatus.OK);
+    }
 }

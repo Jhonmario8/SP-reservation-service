@@ -4,15 +4,16 @@ import com.sp.reservationservice.domain.api.IAuthenticationServicePort;
 import com.sp.reservationservice.domain.api.IReservationServicePort;
 import com.sp.reservationservice.domain.constants.DomainConstants;
 import com.sp.reservationservice.domain.exception.ConflictException;
+import com.sp.reservationservice.domain.exception.DomainException;
 import com.sp.reservationservice.domain.exception.ForbiddenException;
 import com.sp.reservationservice.domain.exception.NotFoundException;
-import com.sp.reservationservice.domain.model.Court;
-import com.sp.reservationservice.domain.model.Reservation;
-import com.sp.reservationservice.domain.model.ReservationStatus;
-import com.sp.reservationservice.domain.model.Role;
+import com.sp.reservationservice.domain.model.*;
 import com.sp.reservationservice.domain.spi.ICourtPersistencePort;
 import com.sp.reservationservice.domain.spi.IReservationPersistencePort;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 @AllArgsConstructor
 public class ReservationService implements IReservationServicePort {
@@ -23,12 +24,26 @@ public class ReservationService implements IReservationServicePort {
 
     @Override
     public void createReservation(Reservation reservation) {
+        Long userId = authenticationServicePort.getCurrentUserId();
         validateRole(Role.CLIENT, DomainConstants.ONLY_CLIENT_CAN_CREATE_RESERVATION);
         getActiveCourt(reservation.getCourtId());
         if (reservationPersistencePort.findByDateAndStartTimeAndCourtId(reservation.getDate(),reservation.getStartTime(), reservation.getCourtId()).isPresent()) {
             throw new ConflictException(DomainConstants.COURT_ALREADY_RESERVED);
         }
-        reservation.setUserId(authenticationServicePort.getCurrentUserId());
+        if (reservation.getStartTime().getMinute() != 0) {
+            throw new DomainException(DomainConstants.RESERVATIONS_MUST_START_ON_THE_HOUR);
+        }
+        if (reservation.getStartTime().getSecond() != 0) {
+            throw new DomainException(DomainConstants.RESERVATIONS_MUST_START_ON_THE_HOUR);
+        }
+        List<Reservation> userReservations = reservationPersistencePort.findAllByUserId(userId);
+        for (Reservation r : userReservations) {
+            if (r.getDate().equals(reservation.getDate()) && r.getStartTime().equals(reservation.getStartTime())) {
+                throw new ConflictException(DomainConstants.USER_ALREADY_HAS_RESERVATION_AT_THIS_TIME);
+            }
+        }
+
+        reservation.setUserId(userId);
         reservation.setStatus(ReservationStatus.PENDING);
         reservationPersistencePort.saveReservation(reservation);
 
@@ -62,6 +77,14 @@ public class ReservationService implements IReservationServicePort {
 
         reservation.setStatus(ReservationStatus.CANCELLED);
         reservationPersistencePort.saveReservation(reservation);
+    }
+    @Override
+    public PageModel<Reservation> getReservations(Long userId, String status, int page, int size) {
+            validateRole(Role.CLIENT, DomainConstants.ONLY_CLIENT_CAN_GET_RESERVATIONS);
+            if (StringUtils.isNotBlank(status)) {
+                return  reservationPersistencePort.findAllByUserIdAndStatus(userId, status, page, size);
+            }
+            return reservationPersistencePort.findAllByUserId(userId, page, size);
     }
 
     private void validateRole(Role requiredRole, String errorMessage) {

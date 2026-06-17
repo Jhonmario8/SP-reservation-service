@@ -1,6 +1,8 @@
 package com.sp.reservationservice.application.handler;
 
+import com.sp.reservationservice.application.dto.PageResponseDTO;
 import com.sp.reservationservice.application.dto.ReservationRequest;
+import com.sp.reservationservice.application.dto.ReservationResponseDTO;
 import com.sp.reservationservice.application.mapper.IReservationMapper;
 import com.sp.reservationservice.domain.api.IReservationServicePort;
 import com.sp.reservationservice.domain.model.ReservationStatus;
@@ -28,4 +30,10 @@ public class ReservationHandler implements IReservationHandler{
     public void cancelReservation(Long reservationId) {
         reservationServicePort.cancelReservation(reservationId);
     }
+
+    @Override
+    public PageResponseDTO<ReservationResponseDTO> getReservations(Long userId, String status, int page, int size) {
+        return reservationMapper.toPageResponse(reservationServicePort.getReservations(userId, status, page, size));
+    }
+
 }

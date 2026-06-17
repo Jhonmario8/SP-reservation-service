@@ -28,4 +28,7 @@ public class DomainConstants {
     public static final String ONLY_CONFIRMED_RESERVATIONS_CAN_BE_COMPLETED = "Only confirmed reservations can be completed";
     public static final String ADMIN_CANNOT_CANCEL_RESERVATION = "Admin cannot cancel reservation";
     public static final String CANNOT_REVERT_TO_PENDING = "Cannot revert reservation status back to pending";
+    public static final String ONLY_CLIENT_CAN_GET_RESERVATIONS = "Only client can get reservations";
+    public static final String USER_ALREADY_HAS_RESERVATION_AT_THIS_TIME = "User already has a reservation at this time";
+    public static final String RESERVATIONS_MUST_START_ON_THE_HOUR = "Reservations must start on the hour";
 }
