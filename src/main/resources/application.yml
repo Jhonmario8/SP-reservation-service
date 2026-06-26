@@ -16,8 +16,8 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
   security:
     jwt:
-      secret: ${PRAGMA_JWT_KEY}
+      secret: ${JWT_SECRET_KEY}
       expiration: 3600000
 
 services:
-    url-users: http://localhost:8080
+    url-notification: http://localhost:8082

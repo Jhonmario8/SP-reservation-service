@@ -2,6 +2,7 @@ package com.sp.reservationservice.infrastructure.configuration;
 
 import com.sp.reservationservice.domain.api.IAuthenticationServicePort;
 import com.sp.reservationservice.domain.api.ICourtServicePort;
+import com.sp.reservationservice.domain.api.INotificationServicePort;
 import com.sp.reservationservice.domain.api.IReservationServicePort;
 import com.sp.reservationservice.domain.spi.ICourtPersistencePort;
 import com.sp.reservationservice.domain.spi.ICourtTypePersistencePort;
@@ -20,6 +21,7 @@ public class BeanConfiguration {
     private final IAuthenticationServicePort authenticationServicePort;
     private final IReservationPersistencePort reservationPersistencePort;
     private final ICourtTypePersistencePort courtTypePersistencePort;
+    private final INotificationServicePort notificationServicePort;
 
     @Bean
     public ICourtServicePort courtServicePort() {
@@ -28,6 +30,6 @@ public class BeanConfiguration {
 
     @Bean
     public IReservationServicePort reservationServicePort() {
-        return new ReservationService(reservationPersistencePort , authenticationServicePort, courtPersistencePort);
+        return new ReservationService(reservationPersistencePort , authenticationServicePort, courtPersistencePort, notificationServicePort);
     }
 }

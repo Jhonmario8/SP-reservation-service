@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class AuthenticationAdapter implements IAuthenticationServicePort {
@@ -35,6 +36,15 @@ public class AuthenticationAdapter implements IAuthenticationServicePort {
         }
     }
 
+    @Override
+    public String getCurrentUserEmail() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+        return Objects.requireNonNull(authentication.getPrincipal()).toString();
+    }
+
     private static Map<String, Object> getClaimsFromAuthentication() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -42,4 +52,6 @@ public class AuthenticationAdapter implements IAuthenticationServicePort {
         }
         return (Map<String, Object>) authentication.getDetails();
     }
+
+
 }

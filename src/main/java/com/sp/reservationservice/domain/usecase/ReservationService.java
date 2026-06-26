@@ -1,6 +1,7 @@
 package com.sp.reservationservice.domain.usecase;
 
 import com.sp.reservationservice.domain.api.IAuthenticationServicePort;
+import com.sp.reservationservice.domain.api.INotificationServicePort;
 import com.sp.reservationservice.domain.api.IReservationServicePort;
 import com.sp.reservationservice.domain.constants.DomainConstants;
 import com.sp.reservationservice.domain.exception.ConflictException;
@@ -21,7 +22,7 @@ public class ReservationService implements IReservationServicePort {
     private final IReservationPersistencePort reservationPersistencePort;
     private final IAuthenticationServicePort authenticationServicePort;
     private final ICourtPersistencePort courtPersistencePort;
-
+    private final INotificationServicePort notificationServicePort;
     @Override
     public void createReservation(Reservation reservation) {
         Long userId = authenticationServicePort.getCurrentUserId();
@@ -45,8 +46,8 @@ public class ReservationService implements IReservationServicePort {
 
         reservation.setUserId(userId);
         reservation.setStatus(ReservationStatus.PENDING);
+        notificationServicePort.reservationCreated(authenticationServicePort.getCurrentUserEmail());
         reservationPersistencePort.saveReservation(reservation);
-
     }
 
     @Override
@@ -75,6 +76,7 @@ public class ReservationService implements IReservationServicePort {
             throw new ForbiddenException(DomainConstants.ONLY_OWNER_CAN_CANCEL_RESERVATION);
         }
 
+        notificationServicePort.reservationCanceled(authenticationServicePort.getCurrentUserEmail());
         reservation.setStatus(ReservationStatus.CANCELLED);
         reservationPersistencePort.saveReservation(reservation);
     }
